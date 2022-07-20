@@ -34,13 +34,9 @@ provider "google-beta" {
 }
 
 provider "kubernetes" {
-  host                   = google_container_cluster.default.endpoint
+  host                   = data.google_container_cluster.my_cluster.endpoint
   token                  = data.google_client_config.current.access_token
-  client_certificate     = base64decode(
-    google_container_cluster.default.master_auth[0].client_certificate,
-  )
-  client_key             = base64decode(google_container_cluster.default.master_auth[0].client_key)
   cluster_ca_certificate = base64decode(
-    google_container_cluster.default.master_auth[0].cluster_ca_certificate,
+    data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate,
   )
 }
