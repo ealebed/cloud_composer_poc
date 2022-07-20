@@ -128,7 +128,7 @@ resource "kubernetes_namespace" "dbt-ns" {
   }
 
   depends_on = [
-    google_container_node_pool.separate-nodepool
+    google_composer_environment.test
   ]
 }
 
