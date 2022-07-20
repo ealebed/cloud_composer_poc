@@ -1,3 +1,10 @@
+data "google_container_cluster" "my_cluster" {
+  name     = reverse(split("/",google_composer_environment.test.config.0.gke_cluster))[0]
+  location = var.gcp_region
+}
+
+data "google_client_config" "current" {}
+
 resource "random_id" "random_suffix" {
   byte_length = 2
 }
@@ -80,5 +87,73 @@ resource "google_storage_bucket_object" "dag_init_upload" {
 
   depends_on = [
     google_composer_environment.test
+  ]
+}
+
+# resource "google_container_node_pool" "separate-nodepool" {
+#   name       = "separate-np"
+#   location   = var.gcp_region
+#   # cluster    = google_container_cluster.default.name
+#   cluster    = reverse(split("/",google_composer_environment.test.config.0.gke_cluster))[0]
+#   node_count = 1
+
+#   autoscaling {
+#     max_node_count = 3
+#     min_node_count = 1
+#   }
+
+#   node_config {
+#     preemptible  = true
+#     machine_type = "e2-medium"
+
+#     taint {
+#       effect = "NO_SCHEDULE"
+#       key = "app"
+#       value = "dbt"
+#     }
+
+#     metadata = {
+#       disable-legacy-endpoints = "true"
+#     }
+#   }
+
+#   depends_on = [
+#     google_composer_environment.test
+#   ]
+# }
+
+resource "kubernetes_namespace" "dbt-ns" {
+  metadata {
+    name = "dbt"
+  }
+
+  depends_on = [
+    google_container_node_pool.separate-nodepool
+  ]
+}
+
+resource "kubernetes_persistent_volume_claim" "dbt-pvc" {
+  metadata {
+    name = "dbt-pvc"
+    namespace = kubernetes_namespace.dbt-ns.metadata[0].name
+    labels = {
+      env = "dev"
+      app = "dbt"
+    }
+  }
+
+  wait_until_bound = false
+  spec {
+    access_modes = ["ReadWriteOnce"]
+
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
+  }
+
+  depends_on = [
+    kubernetes_namespace.dbt-ns
   ]
 }
