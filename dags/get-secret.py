@@ -1,3 +1,8 @@
+"""Example Airflow DAG that gets variable value from Google Secret Manager
+    and print it to STDOUT.
+
+    JUST TO DEMO
+"""
 import datetime
 
 from airflow import DAG

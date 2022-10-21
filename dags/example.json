@@ -1,5 +1,0 @@
-{
-  "GCP_PROJECT":"ylebi-dev",
-  "GCP_REGION":"us-west1",
-  "GCS_BUCKET":"gs://some-uniq-bucket"
-}

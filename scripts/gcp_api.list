@@ -1,0 +1,16 @@
+bigquery.googleapis.com
+cloudapis.googleapis.com
+cloudkms.googleapis.com
+cloudresourcemanager.googleapis.com
+composer.googleapis.com
+compute.googleapis.com
+container.googleapis.com
+dataproc.googleapis.com
+iam.googleapis.com
+logging.googleapis.com
+monitoring.googleapis.com
+run.googleapis.com
+secretmanager.googleapis.com
+servicemanagement.googleapis.com
+serviceusage.googleapis.com
+storage.googleapis.com

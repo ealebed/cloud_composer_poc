@@ -19,7 +19,7 @@ variable "gcp_zone" {
 variable "gcp_composer_image" {
   type        = string
   description = "Name of the Cloud Composer image"
-  default     = "composer-2.0.20-airflow-2.2.5"
+  default     = "composer-2.0.28-airflow-2.3.3"
 }
 
 variable "composer_dag_path" {
@@ -34,26 +34,7 @@ variable "result_bucket" {
   default     = ""
 }
 
-variable "gcp_apis" {
-  type        = set(string)
-  description = "List Google APIs to enable"
-  default     = [
-    "cloudresourcemanager.googleapis.com",
-    "storage-api.googleapis.com",
-    "serviceusage.googleapis.com",
-    "composer.googleapis.com",
-    "compute.googleapis.com",
-    "iam.googleapis.com",
-    "bigquery.googleapis.com",
-    "iam.googleapis.com",
-    "servicenetworking.googleapis.com",
-    "cloudscheduler.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "logging.googleapis.com"
-  ]
-}
-
-variable "gcp_sa_roles" {
+variable "gcp_sa_composer_roles" {
   type        = set(string)
   description = "List Roles to assign to Composer Service account"
   default     = [
@@ -65,5 +46,14 @@ variable "gcp_sa_roles" {
     "roles/storage.objectViewer",
     "roles/container.developer",
     "roles/bigquery.dataOwner"
+  ]
+}
+
+variable "gcp_sa_gcr_cleaner_roles" {
+  type        = set(string)
+  description = "List Roles to assign to GCR-cleaner Service account"
+  default     = [
+      "roles/artifactregistry.repoAdmin",
+      "roles/iam.serviceAccountUser"
   ]
 }

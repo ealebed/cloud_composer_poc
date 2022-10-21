@@ -11,8 +11,3 @@ output "composer_bucket" {
 output "gke_cluster_endpoint" {
   value = data.google_container_cluster.my_cluster.endpoint
 }
-
-# Debug
-# output "cluster" {
-#   value = data.google_container_cluster.my_cluster
-# }
