@@ -9,5 +9,5 @@ output "composer_bucket" {
 }
 
 output "gke_cluster_endpoint" {
-  value = data.google_container_cluster.my_cluster.endpoint
+  value = data.google_container_cluster.composer_cluster.endpoint
 }

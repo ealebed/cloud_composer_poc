@@ -18,7 +18,7 @@ resource "kubernetes_secret" "composer_keyfile" {
     namespace = kubernetes_namespace.dbt_namespace.metadata[0].name
   }
   data = {
-    "keyfile.json" = base64decode(google_service_account_key.sa_composer.private_key)
+    "keyfile.json" = base64decode(google_service_account_key.sa_composer_key.private_key)
   }
 
   depends_on = [

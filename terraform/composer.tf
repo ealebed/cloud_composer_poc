@@ -34,23 +34,34 @@ resource "google_composer_environment" "test" {
     }
 
     workloads_config {
-      scheduler {
-        cpu        = 0.5
-        memory_gb  = 1
-        storage_gb = 2
-        count      = 1
+      dynamic "scheduler" {
+        for_each = var.scheduler != null ? [var.scheduler] : []
+        content {
+          cpu        = scheduler.value["cpu"]
+          memory_gb  = scheduler.value["memory_gb"]
+          storage_gb = scheduler.value["storage_gb"]
+          count      = scheduler.value["count"]
+        }
       }
-      web_server {
-        cpu        = 0.5
-        memory_gb  = 1
-        storage_gb = 2
+
+      dynamic "web_server" {
+        for_each = var.web_server != null ? [var.web_server] : []
+        content {
+          cpu        = web_server.value["cpu"]
+          memory_gb  = web_server.value["memory_gb"]
+          storage_gb = web_server.value["storage_gb"]
+        }
       }
-      worker {
-        cpu = 1
-        memory_gb  = 1
-        storage_gb = 2
-        min_count  = 1
-        max_count  = 3
+
+      dynamic "worker" {
+        for_each = var.worker != null ? [var.worker] : []
+        content {
+          cpu        = worker.value["cpu"]
+          memory_gb  = worker.value["memory_gb"]
+          storage_gb = worker.value["storage_gb"]
+          min_count  = worker.value["min_count"]
+          max_count  = worker.value["max_count"]
+        }
       }
     }
 
@@ -67,7 +78,6 @@ resource "google_composer_environment" "test" {
 
   depends_on = [
     google_project_iam_member.composer_agent_v2_role,
-    google_project_service.services,
     google_compute_network.default,
     google_compute_subnetwork.default,
     google_service_account.sa_composer,
